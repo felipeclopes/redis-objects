@@ -160,8 +160,14 @@ class Redis
 
     # Instance methods that appear in your class when you include Redis::Objects.
     module InstanceMethods
-      # Map up one level to make modular extend/include approach sane
-      def redis()         self.class.redis end
+      # Enable per-instance connections
+      def redis
+        @redis || self.class.redis || Objects.redis         
+      end
+      def redis=(conn)
+        @redis = conn
+      end
+
       def redis_objects() self.class.redis_objects end
 
       def redis_options(name) #:nodoc:
